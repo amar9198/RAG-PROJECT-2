@@ -1,7 +1,11 @@
+
 .venv/
 __pycache__/
 *.pyc
+
 .env
 .env.*
 !.env.example
+
 chroma_db/
+vector_store/
