@@ -1,0 +1,16 @@
+[
+  {
+    "id": "b7ba6880e2484ee1ac4046c634ed7da0",
+    "filename": "Real-Time-Facial-Recognition-System-Design-Implementation-and-Validation.pdf",
+    "size_bytes": 1119477,
+    "pages": 18,
+    "chunks": 61,
+    "status": "indexed",
+    "error": null,
+    "uploaded_at": "2026-10-10T22:02:07+00:00",
+    "sha256": "2b82a25b52fc763166eeb1a07fcb3ae9eab958c54eda16922509f1fa0a6a9680",
+    "chunk_size": 1000,
+    "chunk_overlap": 200,
+    "embedding_model": "mistral-embed"
+  }
+]
