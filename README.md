@@ -1,509 +1,199 @@
-# 🤖 Deep Learning RAG Chat Assistant
+# 🧠 Deep Learning RAG Chat Assistant
 
-An AI-powered **Retrieval-Augmented Generation (RAG)** application that allows users to ask questions about a deep learning document and receive answers based only on the relevant information retrieved from the document.
+An AI-powered **Retrieval-Augmented Generation (RAG)** application that allows users to ask questions about deep learning documents and receive context-aware answers using semantic search and large language models.
 
-The application combines **Mistral AI embeddings, ChromaDB, LangChain, and Groq LLMs** to provide a document-based question-answering system.
+🔗 **Live Demo:** [Try the RAG Chat Assistant](https://rag-project-2-zpubvdumfp9hand7zueyu9.streamlit.app/)
 
-## 🚀 Live Demo
-
-👉 **[Try the Deep Learning RAG Chat Assistant](https://deep-learning-rag-chat-assistant-peerwcw6feuz3uy4d7zkyb.streamlit.app/)**
+💻 **GitHub Repository:** [RAG-PROJECT-2](https://github.com/amar9198/RAG-PROJECT-2)
 
 ---
 
 ## 📌 Project Overview
 
-Large Language Models can generate useful answers, but they may sometimes provide information that is not present in a specific document.
+The Deep Learning RAG Chat Assistant combines document processing, vector embeddings, semantic retrieval, and generative AI to answer questions using relevant document content.
 
-This project uses **Retrieval-Augmented Generation (RAG)** to solve this problem.
+Instead of relying only on a language model's existing knowledge, the application retrieves relevant information from a document and uses it as context to generate answers.
 
-Instead of asking the LLM to answer directly, the application:
-
-1. Loads the document.
-2. Splits the document into smaller chunks.
-3. Converts the chunks into vector embeddings.
-4. Stores the embeddings in ChromaDB.
-5. Retrieves the most relevant chunks for a user's question.
-6. Sends the retrieved context to the LLM.
-7. Generates an answer based on the retrieved document content.
-
-### RAG Pipeline
-
-```text
-                Deep Learning PDF
-                       │
-                       ▼
-                Document Loader
-                       │
-                       ▼
-                 Text Splitting
-                       │
-                       ▼
-             Mistral AI Embeddings
-                       │
-                       ▼
-                   ChromaDB
-                       │
-                       ▼
-                 User Question
-                       │
-                       ▼
-              MMR Retriever
-                       │
-                       ▼
-              Relevant Context
-                       │
-                       ▼
-                Groq LLM
-                       │
-                       ▼
-                Final Answer
-```
-
----
+This project demonstrates how modern AI technologies can be combined to build an interactive document question-answering system.
 
 ## ✨ Features
 
-* 📚 Question answering from a deep learning document
-* 🔎 Semantic document search
-* 🧠 Retrieval-Augmented Generation
-* 🔢 Mistral AI embeddings
-* 🗄️ ChromaDB vector database
-* 🎯 Maximum Marginal Relevance (MMR) retrieval
-* 🤖 Groq-powered LLM responses
-* 🌐 Streamlit web interface
-* 📄 PDF document processing
-* 🔐 Environment-variable based API key management
-* 📖 Retrieved context can be viewed in the application
+- 📄 **Document Processing:** Load and process documents for retrieval.
+- ✂️ **Text Splitting:** Divide documents into manageable chunks.
+- 🔎 **Semantic Search:** Find relevant content using vector embeddings.
+- 🗄️ **Vector Database:** Store and retrieve document embeddings using ChromaDB.
+- 🤖 **AI-Powered Answers:** Generate context-aware responses using a Groq-hosted language model.
+- 💬 **Interactive Chat Interface:** Ask questions through a Streamlit application.
+- 🎯 **MMR Retrieval:** Retrieve relevant and diverse document chunks.
+- 🔗 **Modular Architecture:** Separate document loaders, retrievers, database utilities, and RAG pipeline logic.
 
----
+## 🛠️ Technology Stack
 
-## 🛠️ Technologies Used
+| Technology | Purpose |
+|---|---|
+| Python | Core programming language |
+| Streamlit | Web application interface |
+| LangChain | RAG pipeline orchestration |
+| ChromaDB | Vector storage and similarity search |
+| Mistral AI | Text embedding generation |
+| Groq | Language model inference |
+| PyPDF / document loaders | Document ingestion |
+| Git and GitHub | Version control and source code hosting |
 
-| Technology          | Purpose                         |
-| ------------------- | ------------------------------- |
-| Python              | Main programming language       |
-| LangChain           | RAG application framework       |
-| LangChain Community | Document loading and utilities  |
-| LangChain Chroma    | ChromaDB integration            |
-| Mistral AI          | Text embeddings                 |
-| Groq                | Large Language Model            |
-| ChromaDB            | Vector database                 |
-| PyPDF               | PDF document loading            |
-| Streamlit           | Web application interface       |
-| python-dotenv       | Environment variable management |
+## ⚙️ How It Works
 
----
+1. **Document Loading:** The application loads the source document.
+2. **Text Chunking:** The document is divided into smaller text segments.
+3. **Embedding Generation:** Text segments are converted into vector embeddings.
+4. **Vector Storage:** The embeddings are stored in ChromaDB.
+5. **Question Processing:** The user submits a question through the chat interface.
+6. **Relevant Retrieval:** The retriever searches for relevant document chunks.
+7. **Answer Generation:** The language model uses the retrieved context to generate an answer.
+8. **Response Display:** The answer is presented to the user through Streamlit.
 
-## 🧠 Models Used
-
-### Embedding Model
-
-```text
-mistral-embed
-```
-
-Mistral AI's embedding model is used to convert document chunks and user queries into numerical vector representations.
-
-### Language Model
+## 🏗️ Project Structure
 
 ```text
-openai/gpt-oss-120b
-```
-
-The model is accessed through the Groq API and is used to generate the final answer from the retrieved document context.
-
----
-
-## 🔍 Retrieval Configuration
-
-The project uses **Maximum Marginal Relevance (MMR)** retrieval.
-
-```python
-retriever = vectorstore.as_retriever(
-    search_type="mmr",
-    search_kwargs={
-        "k": 4,
-        "fetch_k": 10,
-        "lambda_mult": 0.5
-    }
-)
-```
-
-### Parameters
-
-* `k = 4`
-  Retrieves the 4 most relevant document chunks.
-
-* `fetch_k = 10`
-  Initially considers 10 candidate chunks.
-
-* `lambda_mult = 0.5`
-  Balances relevance and diversity between retrieved chunks.
-
-MMR helps reduce the retrieval of multiple highly similar chunks and can provide more diverse context to the language model.
-
----
-
-## 📄 Document Processing
-
-The project uses:
-
-```python
-PyPDFLoader
-```
-
-to load the deep learning PDF.
-
-The document is divided into chunks using:
-
-```python
-RecursiveCharacterTextSplitter(
-    chunk_size=1000,
-    chunk_overlap=200
-)
-```
-
-### Chunk Configuration
-
-| Parameter        | Value |
-| ---------------- | ----: |
-| Chunk Size       |  1000 |
-| Chunk Overlap    |   200 |
-| Retrieved Chunks |     4 |
-| Candidate Chunks |    10 |
-
-The source PDF contains approximately **534 pages** and is divided into approximately **1,146 chunks** during database creation.
-
----
-
-## 📁 Project Structure
-
-```text
-deep-learning-RAG-Chat-Assistant/
+RAG-PROJECT-2/
 │
 ├── app.py
+├── app2.py
 ├── main.py
 ├── page.py
+├── rag_pipeline.py
+├── database.py
 ├── create_database.py
+├── requirements.txt
+├── README.md
+├── .gitignore
 │
 ├── retrievers/
 │   ├── arxiv_retriever.py
 │   ├── mmr.py
 │   └── multiquery.py
 │
-├── vector store/
-│   └── db.py
-│
 ├── documents loaders/
-│   ├── deep-learning-material-dept-ece-ase-blr-1.pdf
-│   ├── notes.txt
-│   ├── pdf.py
-│   ├── sample.pdf
-│   └── test.py
-│
-├── requirements.txt
-├── .env.example
-├── .gitignore
-└── README.md
+├── data/
+├── chroma_db/
+└── vector_store/
 ```
 
----
+*Note: The structure above is illustrative. Adjust filenames and folders to match the actual files in your repository. The deployed Streamlit entry point may differ.*
 
-## ⚙️ How It Works
+## 🚀 Getting Started
 
-### 1. Load the document
-
-The PDF is loaded using `PyPDFLoader`.
-
-```python
-data = PyPDFLoader(
-    "documents loaders/deep-learning-material-dept-ece-ase-blr-1.pdf"
-)
-
-docs = data.load()
-```
-
-### 2. Split the document
-
-The document is divided into smaller chunks:
-
-```python
-splitter = RecursiveCharacterTextSplitter(
-    chunk_size=1000,
-    chunk_overlap=200
-)
-
-chunks = splitter.split_documents(docs)
-```
-
-### 3. Generate embeddings
-
-Mistral AI converts the chunks into vector representations:
-
-```python
-embedding_model = MistralAIEmbeddings(
-    model="mistral-embed"
-)
-```
-
-### 4. Store vectors
-
-The embeddings are stored using ChromaDB:
-
-```python
-vectorstore = Chroma.from_documents(
-    documents=chunks,
-    embedding=embedding_model,
-    persist_directory="chroma_db"
-)
-```
-
-### 5. Retrieve relevant information
-
-When the user asks a question, the retriever searches for relevant chunks.
-
-```python
-docs = retriever.invoke(query)
-```
-
-### 6. Generate the answer
-
-The retrieved context is provided to the LLM.
-
-The system prompt instructs the model to answer only using the retrieved context.
-
-If the answer is not available in the retrieved document, the application returns:
-
-```text
-I could not find the answer in the document.
-```
-
----
-
-## 💻 Installation
-
-### Clone the repository
+### 1. Clone the repository
 
 ```bash
-git clone https://github.com/amar9198/deep-learning-RAG-Chat-Assistant.git
+git clone https://github.com/amar9198/RAG-PROJECT-2.git
+cd RAG-PROJECT-2
 ```
 
-Move into the project directory:
+### 2. Create a virtual environment
 
-```bash
-cd deep-learning-RAG-Chat-Assistant
-```
-
-### Create a virtual environment
-
-Windows:
+**Windows:**
 
 ```powershell
 python -m venv .venv
+.venv\Scripts\activate
 ```
 
-Activate it:
+**macOS / Linux:**
 
-```powershell
-.venv\Scripts\Activate.ps1
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
 ```
 
-### Install dependencies
+### 3. Install dependencies
 
-```powershell
+```bash
+python -m pip install --upgrade pip
 pip install -r requirements.txt
 ```
 
----
+### 4. Configure API keys
 
-## 🔑 Environment Variables
-
-Create a `.env` file in the project root:
+Create a `.env` file in the project root if your application uses `python-dotenv`.
 
 ```env
 MISTRAL_API_KEY=your_mistral_api_key
 GROQ_API_KEY=your_groq_api_key
 ```
 
-Never upload your real `.env` file or API keys to GitHub.
+Replace the placeholder values with your own API keys.
 
-The repository uses `.env.example` as a template.
+**Security:** Never commit `.env` or expose your API keys publicly.
 
----
+### 5. Run the application
 
-## ▶️ Run Locally
+If the Streamlit entry point is `app.py`:
 
-Start the Streamlit application:
-
-```powershell
+```bash
 streamlit run app.py
 ```
 
-The application will open in your browser.
+If your application uses `app2.py` instead:
 
-Usually the local address is:
-
-```text
-http://localhost:8501
+```bash
+streamlit run app2.py
 ```
 
----
+Use the entry point configured for your application.
 
-## 🌐 Deployment
+## ☁️ Deployment
 
-The application is deployed using **Streamlit Community Cloud**.
+This application is deployed using Streamlit Community Cloud.
 
-Deployment workflow:
+**Live application:** [RAG-PROJECT-2](https://rag-project-2-zpubvdumfp9hand7zueyu9.streamlit.app/)
 
-```text
-Local Project
-     │
-     ▼
-   Git
-     │
-     ▼
-  GitHub
-     │
-     ▼
-Streamlit Community Cloud
-     │
-     ▼
- Public Web Application
-```
+To deploy your own version:
 
-### Live Application
+1. Push the project to GitHub.
+2. Open [Streamlit Community Cloud](https://share.streamlit.io/).
+3. Connect your GitHub repository.
+4. Select the appropriate branch and Streamlit entry-point file.
+5. Add the required API keys under the application's Secrets settings.
+6. Deploy the application.
 
-👉 **[Deep Learning RAG Chat Assistant](https://deep-learning-rag-chat-assistant-peerwcw6feuz3uy4d7zkyb.streamlit.app/)**
+## 🔐 Environment Variables
 
----
-
-## 🔐 API Key Configuration on Streamlit
-
-For deployment, API keys should be configured through Streamlit Secrets rather than committing them to GitHub.
-
-Required secrets:
+Configure the API keys required by your application in your local `.env` file or Streamlit Secrets.
 
 ```toml
 MISTRAL_API_KEY = "your_mistral_api_key"
 GROQ_API_KEY = "your_groq_api_key"
 ```
 
----
+Only include environment variables that your code actually uses. Never publish real credentials in your repository.
 
-## 🎯 Example Questions
+## 🎯 Use Cases
 
-You can ask questions related to the information contained in the deep learning document, such as:
-
-```text
-What is deep learning?
-
-What is gradient descent?
-
-What is a neural network?
-
-What is backpropagation?
-
-What is CNN?
-
-What is RNN?
-
-What is Word2Vec?
-```
-
-The system retrieves relevant sections from the document before generating the response.
-
----
-
-## 📊 Advantages of the Project
-
-### Traditional LLM
-
-```text
-Question
-   ↓
-LLM
-   ↓
-Answer
-```
-
-The model may not have access to the specific information contained in the user's document.
-
-### RAG System
-
-```text
-Question
-   ↓
-Retriever
-   ↓
-Relevant Document Chunks
-   ↓
-LLM + Retrieved Context
-   ↓
-Answer
-```
-
-This allows the application to ground its responses in the supplied document.
-
----
+- Question answering over deep learning documents
+- AI-powered document research
+- Semantic search and information retrieval
+- Learning and exploring RAG architectures
+- Building knowledge assistants over custom documents
 
 ## 🔮 Future Improvements
 
-Possible improvements include:
-
-* 📚 Support multiple PDF documents
-* 📤 Allow users to upload their own documents
-* 💬 Add conversational chat history
-* 🧠 Add multi-document retrieval
-* 🔎 Improve retrieval with hybrid search
-* 📈 Add evaluation metrics for RAG performance
-* ⚡ Optimize embedding and retrieval speed
-* 🗂️ Add document metadata filtering
-* 🧪 Add automated RAG evaluation
-* 🎨 Improve the Streamlit UI
-* 🔐 Add user authentication
-* 📊 Display retrieval scores and document sources
-
----
-
-## 📚 Learning Outcomes
-
-This project demonstrates practical understanding of:
-
-* Large Language Models
-* Retrieval-Augmented Generation
-* Vector embeddings
-* Vector databases
-* Semantic search
-* Document chunking
-* Information retrieval
-* Prompt engineering
-* LangChain
-* Mistral AI
-* Groq
-* ChromaDB
-* Streamlit
-* Git and GitHub
-* Cloud deployment
-
----
+- Support for multiple PDF and document uploads
+- Chat history and conversational memory
+- Source citations for generated answers
+- Improved error handling and API key validation
+- Support for additional document formats
+- Enhanced user interface and retrieval evaluation
 
 ## 👨‍💻 Author
 
-**Amar**
+**Amar Prajapati**
 
-BTech — Computer Science / Engineering
+GitHub: [@amar9198](https://github.com/amar9198)
 
-GitHub:
-https://github.com/amar9198
+## 📄 License
+
+Add a license to this repository if you intend to distribute or reuse the project under specific terms.
 
 ---
 
-## ⭐ Project
-
-If you find this project useful for learning about RAG and LLM applications, consider giving the repository a ⭐ on GitHub.
-
-**Live Demo:**
-https://deep-learning-rag-chat-assistant-peerwcw6feuz3uy4d7zkyb.streamlit.app/
-
-**Repository:**
-https://github.com/amar9198/deep-learning-RAG-Chat-Assistant
+⭐ If you find this project useful, consider starring the repository!
